@@ -76,4 +76,5 @@ def MergeDocx(path):
 if __name__ == '__main__':
     path = os.getcwd()
     ReSaveAllDoc(path)
+    # 转换文件格式
     MergeDocx(path)
