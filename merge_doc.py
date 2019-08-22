@@ -2,7 +2,6 @@
 #    Author : wonder_zz
 #    Time   : 2019/8/20  20:41
 import os
-import sys
 import time
 from docx import Document
 from win32com import client as wc
@@ -10,7 +9,7 @@ from win32com import client as wc
 
 def ReSaveDoc(path, filename):
     """
-    将doc转换docx
+    switch doc 2 docx
     """
     time1 = time.time()
     word = wc.Dispatch('Word.Application')
@@ -26,14 +25,14 @@ def ReSaveDoc(path, filename):
 
 def ReSaveAllDoc(path):
     """
-    保存全部文档
+    find all doc file then resave them
     """
     filelist = []
     dirs = os.listdir()
     for f in dirs:
         filelist.append(str(f))
     for file in filelist:
-        if file.find(".doc") != -1:
+        if (file.find(".doc") != -1) and (file.find(".docx") == -1):
             ReSaveDoc(path, file)
             print(file)
         else:
@@ -42,25 +41,28 @@ def ReSaveAllDoc(path):
 
 def combine_word_documents(path, files):
     """
-    创建合并文件
+    merge docx
     """
+    app = wc.Dispatch('Word.Application')
     merged_document = Document()
-    for index, file in enumerate(files):
-        sub_doc = Document(path + "\\" + file)
-
-        # Don't add a page break if you've reached the last file.
-        if index < len(files) - 1:
-            sub_doc.add_page_break()
-
-        for element in sub_doc.element.body:
-            merged_document.element.body.append(element)
-
     merged_document.save(path + "\\" + '合并文件.docx')
-
+    doc = app.Documents.Open(path + "\\" + '合并文件.docx')
+    try:
+        for index, file in enumerate(files):
+            # sub_doc = app.Documents.Open(path + "\\" + file)
+            # Copy content from tag file
+            sub = doc.new_subdoc()
+            sub.subdocx = Document(path + "\\" + file)
+            doc.render(sub)
+            # sub_doc.Close()
+            # Paste file after merge_docx
+    except Exception as e:
+        doc.Close()
+    doc.Close()
 
 def MergeDocx(path):
     """
-    合并文件
+    find all the docx file
     """
     files = []
     filelist = []
