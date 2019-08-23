@@ -4,6 +4,7 @@
 import os
 import time
 from docx import Document
+from docxtpl import DocxTemplate
 from win32com import client as wc
 
 
@@ -46,19 +47,22 @@ def combine_word_documents(path, files):
     app = wc.Dispatch('Word.Application')
     merged_document = Document()
     merged_document.save(path + "\\" + '合并文件.docx')
-    doc = app.Documents.Open(path + "\\" + '合并文件.docx')
     try:
         for index, file in enumerate(files):
-            # sub_doc = app.Documents.Open(path + "\\" + file)
-            # Copy content from tag file
+            doc = Document(path + "\\" + '合并文件.docx')
+            p = doc.add_paragraph('{{temp_name}}')
+            p.add_run('bold').bold = True
+            p.add_run(' and some ')
+            p.add_run('italic.').italic = True
+            doc.add_page_break()
+            doc.Close()
+            doc = DocxTemplate(path + "\\" + '合并文件.docx')
             sub = doc.new_subdoc()
             sub.subdocx = Document(path + "\\" + file)
-            doc.render(sub)
-            # sub_doc.Close()
-            # Paste file after merge_docx
+            doc.render({'temp_name':sub})
+            doc.save(path + "\\" + '合并文件.docx')
     except Exception as e:
-        doc.Close()
-    doc.Close()
+        pass
 
 def MergeDocx(path):
     """
