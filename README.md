@@ -1,36 +1,37 @@
-# 主要语言是python #
-## 用到的库包括docx、win32com ##
+# The programming language is python #
+## The lib i used include docx、win32com、docxtpl##
+## I use so much libs because I don't want Repeated wheels docx is very powerful in create docx,but docxtpl is powerful in edit docx,use them in different demand.
  
-# 主要步骤包括： #
 
+# The main steps are： #
 
-## 1.从文件夹中获取文件列表 ##
+## 1.get file in path ##
 
     def MergeDocx(path):
         """
-        查找文件
+        find all doc&docx file in path
         """
 
 
-## 2.将doc转换docx ##
+## 2.swicth doc into docx##
 
     def ReSaveDoc(path, filename):
     """
-    将doc转换docx
+    swicth doc into docx
     """
 
 
-## 3.创建新文件，准备合并用 ##
+## 3.add file into list ##
 
     def ReSaveAllDoc(path):
     """
-    重新保存全部文档
+    find file jump to 2
     """
 
 
-## 4.将排序的文件，逐个跟新文件合并。##
+## 4.create merge.docx,combine other file into this。##
 
     def combine_word_documents(path, files):
     """
-    创建合并文件
+    combine file
     """

@@ -44,25 +44,22 @@ def combine_word_documents(path, files):
     """
     merge docx
     """
-    app = wc.Dispatch('Word.Application')
     merged_document = Document()
-    merged_document.save(path + "\\" + '合并文件.docx')
+    merged_document.save(path + "\\" + 'merge.docx')
     try:
         for index, file in enumerate(files):
-            doc = Document(path + "\\" + '合并文件.docx')
-            p = doc.add_paragraph('{{temp_name}}')
-            p.add_run('bold').bold = True
-            p.add_run(' and some ')
-            p.add_run('italic.').italic = True
+            doc = Document(path + "\\" + 'merge.docx')
+            doc.add_paragraph('{{temp_name}}')
             doc.add_page_break()
-            doc.Close()
+            doc.save(path + "\\" + 'merge.docx')
             doc = DocxTemplate(path + "\\" + '合并文件.docx')
             sub = doc.new_subdoc()
             sub.subdocx = Document(path + "\\" + file)
-            doc.render({'temp_name':sub})
-            doc.save(path + "\\" + '合并文件.docx')
+            doc.render({'temp_name': sub})
+            doc.save(path + "\\" + 'merge.docx')
     except Exception as e:
         pass
+
 
 def MergeDocx(path):
     """
@@ -81,6 +78,6 @@ def MergeDocx(path):
 
 if __name__ == '__main__':
     path = os.getcwd()
+    # Test(path)
     ReSaveAllDoc(path)
-    # 转换文件格式
     MergeDocx(path)
